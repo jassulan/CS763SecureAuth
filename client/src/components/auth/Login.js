@@ -38,6 +38,8 @@ const Login = ({ login, isAuthenticated, user }) => {
         <div className="form-group">
           <input aria-label="text-input"
             type="text"
+            pattern="[a-zA-Z0-9-]+"
+            title="letters and numbers only"
             placeholder="User Name"
             name="username"
             value={username}
@@ -49,10 +51,11 @@ const Login = ({ login, isAuthenticated, user }) => {
           <input
             type="password"
             placeholder="Password"
+            pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+            title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"
             name="password"
             value={password}
             onChange={onChange}
-            minLength="6"
           />
         </div>
         <input type="submit" className="btn btn-primary" value="Login" />

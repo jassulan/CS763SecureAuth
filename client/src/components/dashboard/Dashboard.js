@@ -11,7 +11,7 @@ const Dashboard = ({
   return (
     <Fragment>
 
-      <h1 className="large text-primary">Welcome {user.username}</h1>
+      <h1 className="large text-primary">Welcome {user.username}!</h1>
 
     </Fragment>
   );

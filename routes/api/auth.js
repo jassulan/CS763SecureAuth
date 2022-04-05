@@ -37,20 +37,32 @@ router.post(
     const { username, password } = req.body;
 
     try {
+      // Search by userName in Database
       let user = await User.findOne({ username });
 
+      const isMatch = false;
+
       if (!user) {
-        return res
-          .status(400)
-          .json({ errors: [{ msg: 'Invalid Credentials' }] });
+        // If user is not found
+        // To prevent the information leakage through the side channel time
+        // default in correct password will be checked
+        isMatch = await bcrypt.compare(password + "incorrectSalt",
+          "incorrectPassword");
+      } else {
+        // If user found
+        // Prepend the salt to the given password and 
+        // hash it using the same hash function
+        isMatch = await bcrypt.compare(password + user.usersalt,
+          user.password);
       }
 
-      const isMatch = await bcrypt.compare(password, user.password);
+      // Clearniing password
+      password = " ";
 
       if (!isMatch) {
         return res
           .status(400)
-          .json({ errors: [{ msg: 'Invalid Credentials' }] });
+          .json({ errors: [{ msg: 'Your credential is incorrect' }] });
       }
 
       const payload = {
@@ -59,10 +71,13 @@ router.post(
         }
       };
 
+      // Upon a successful login, a unique session ID should be generated 
+      // and securely stored together with the timestamp using jwt
+      // expires in 1 hour
       jwt.sign(
         payload,
         config.get('jwtSecret'),
-        { expiresIn: '5 days' },
+        { expiresIn: '1h' },
         (err, token) => {
           if (err) throw err;
           res.json({ token });

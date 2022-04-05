@@ -25,7 +25,6 @@ const Register = ({ setAlert, register, isAuthenticated, user }) => {
     if (password !== password2) {
       setAlert('Passwords do not match', 'danger');
     } else {
-      console.log({ username, password })
       register({ username, password });
     }
   };
@@ -44,6 +43,8 @@ const Register = ({ setAlert, register, isAuthenticated, user }) => {
         <div className="form-group">
           <input
             type="text"
+            pattern="[a-zA-Z0-9-]+"
+            title="letters and numbers only"
             placeholder="User Name"
             name="username"
             value={username}
@@ -54,6 +55,8 @@ const Register = ({ setAlert, register, isAuthenticated, user }) => {
           <input
             type="password"
             placeholder="Password"
+            pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+            title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"
             name="password"
             value={password}
             onChange={onChange}
