@@ -56,9 +56,6 @@ router.post(
           user.password);
       }
 
-      // Clearniing password
-      password = " ";
-
       if (!isMatch) {
         return res
           .status(400)
@@ -83,7 +80,17 @@ router.post(
           res.json({ token });
         }
       );
+
+      // Clearniing local variables
+      password = "";
+      user = "";
+
     } catch (err) {
+
+      // Clearniing local variables
+      password = "";
+      user = "";
+
       console.error(err.message);
       res.status(500).send('Server error');
     }

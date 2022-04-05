@@ -73,6 +73,23 @@ export const login = (username, password) => async dispatch => {
   }
 };
 
+// Logout User
+export const logout = () => async dispatch => {
+  try {
+    const res = await api.post('/logout');
+    dispatch({
+      type: LOGOUT,
+      payload: res.data
+    });
+  } catch (err) {
+    const errors = err.response.data.errors;
 
-// Logout
-export const logout = () => ({ type: LOGOUT });
+    if (errors) {
+      errors.forEach(error => dispatch(setAlert(error.msg, 'danger')));
+    }
+
+    dispatch({
+      type: LOGOUT
+    });
+  }
+};
